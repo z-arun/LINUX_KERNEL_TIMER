@@ -11,14 +11,11 @@ struct timer_list tl = {
         .function = testfun,
 };
 
-
 static void testfun(struct timer_list * ptr)
 {
         pr_info("In timer callback \n");
         mod_timer(&tl,ptr->expires + 7 * HZ);
-
 }
-
 
 MODULE_LICENSE("GPL");
 
@@ -32,7 +29,10 @@ int __init startFun(void)
 
 void __exit endFun(void)
 {
+        if(timer_pending(&tl))
+                pr_info("timer pending ");
         del_timer(&tl);
+        //del_timer_sync(&tl);
         printk(KERN_INFO "\nbye world\n");
 }
 
